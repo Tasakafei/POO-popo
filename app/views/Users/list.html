@@ -1,0 +1,74 @@
+<form class="form-inline">
+  <div class="form-group">
+    <label for="inputId">Id</label>
+    <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model ="searchUser.id">
+  </div>
+  <div class="form-group" style="margin-left:10px;">
+    <label for="inputName">Name</label>
+    <input type="text" class="form-control" id="inputName" placeholder="Poutine" ng-model="searchUser.name">
+  </div>
+  <div class="form-group" style="margin-left:10px;">
+    <label for="inputSurname">Name</label>
+    <input type="text" class="form-control" id="inputSurname" placeholder="Vladimir" ng-model="searchUser.surname">
+  </div>
+</form>
+<h3 class="page-header">Liste des utilisateurs</h3>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Delete</th>
+      <th>Edit</th>
+      <th>Name</th>
+      <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="user in users | filter:searchUser">
+        <td>{{$index}}</td>
+        <td><button class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteUser('{{user.id}}')" ></button></td>
+        <td><button type="button" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdit" ng-click="editUserView('{{user.id}}')"></button></td>
+        <td><a ng-href="#/user/{{user.id}}">{{user.name}} {{user.surname}}</a></td>
+        <td>{{user.email}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div id="modalEdit" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeParamsEdit()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Edit user</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form>
+            <div class="form-group">
+              <label for="inputEditName">Name</label>
+              <input type="text" class="form-control" id="inputEditName" placeholder="{{edit.name}}" ng-model="newFeed.name" required>
+            </div>
+            <div class="form-group">
+              <label for="inputEditSurname">Surname</label>
+              <input type="text" class="form-control" id="inputEditSurname" placeholder="{{edit.surname}}" ng-model="newFeed.surname" required>
+            </div>
+            <div class="form-group">
+              <label for="inputEditEmail">Email</label>
+              <input type="email" class="form-control" id="inputEditEmail" placeholder="{{edit.email}}" ng-model="newFeed.email">
+            </div>
+            <div class="form-group">
+              <label for="inputEditWebsite">Website</label>
+              <input type="text" class="form-control" id="inputEditWebsite" placeholder="{{edit.website}}" ng-model="newFeed.website">
+            </div>
+            <p ng-show="editStatus" >Yeah ! Done ! </p>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeParamsEdit()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="saveEditUserChanged(newFeed)">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
