@@ -1,0 +1,82 @@
+<form class="form-inline">
+  <div class="form-group">
+    <label for="inputId">Id</label>
+    <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model="searchProject.id">
+  </div>
+  <div class="form-group" style="margin-left:10px;">
+    <label for="inputTitle">Title</label>
+    <input type="text" class="form-control" id="inputTitle" placeholder="Fistinière" ng-model="searchProject.title">
+  </div>
+  <div class="form-group" style="margin-left:10px;">
+    <label for="inputDescription">Description</label>
+    <input type="text" class="form-control" id="inputDescription" placeholder="Il était une fois..."
+           ng-model="searchProject.description">
+  </div>
+</form>
+<h3 class="page-header">Projects</h3>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Delete</th>
+      <th>Edit</th>
+      <th>Title</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="project in projects | filter:searchProject">
+      <td>{{$index}}</td>
+      <td>
+        <button class="glyphicon glyphicon-remove" aria-hidden="true"
+                ng-click="deleteProject('{{project.id}}')"></button>
+      </td>
+      <td>
+        <button type="button" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#modalEdit"
+                ng-click="editProjectView('{{project.id}}');"></button>
+      </td>
+      <td><a ng-href="#/project/{{project.id}}">{{project.title}}</a></td>
+      <td>{{project.description}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div id="modalEdit" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeParamsEdit()"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Edit user</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form>
+            <div class="form-group">
+              <label for="inputEditTitle">Title</label>
+              <input type="text" class="form-control" id="inputEditTitle" ng-model="newFeed.title" required>
+            </div>
+            <div class="form-group">
+              <label for="inputEditSurname">Description</label>
+              <input type="text" class="form-control" id="inputEditSurname" ng-model="newFeed.description" required>
+            </div>
+            <div class="form-group">
+              <label for="inputEditYear">Year</label>
+              <input type="email" class="form-control" id="inputEditYear" ng-model="newFeed.year">
+            </div>
+
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeParamsEdit()">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                ng-click="saveEditProjectChanged(newFeed); newFeed= null;">Save changes
+        </button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div><!-- /.modal -->

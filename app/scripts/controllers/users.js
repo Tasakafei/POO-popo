@@ -9,12 +9,6 @@
  */
 angular.module('pooIhmExemplesApp')
   .controller('UsersCtrl', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-
     $http.get('http://poo-ihm-2015-rest.herokuapp.com/api/Users')
       .success(function(data) {
         $scope.users = data.data;
@@ -53,13 +47,14 @@ angular.module('pooIhmExemplesApp')
     $scope.editUserView = function (data) {
       $scope.activeEdit = data;
     };
-    var updateUsers = function(data) {
+
+    var updateUsers = function (id, data) {
       console.log("appel updateUsers");
       var index2 = -1;
       var comArr2 = eval( $scope.users );
       var goodOne;
       for( var i = 0; i < comArr2.length; i++ ) {
-        if( comArr2[i].id == data ) {
+        if (comArr2[i].id == id) {
           index2 = i;
           goodOne = comArr2[i];
           break;
@@ -68,17 +63,15 @@ angular.module('pooIhmExemplesApp')
       if( index2 == -1 ) {
         alert( "Something gone wrong" );
       } else {
-        $scope.users.splice(index2, 1, goodOne);
-        console.log(goodOne);
-        console.log(index2);
+        $scope.users.splice(index2, 1, data);
       }
-    }
-
-    $scope.saveEditUserChanged = function (data) {
-      $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Users/'+$scope.activeEdit, data).success(function(data) {
+    };
+// TODO PENSER A CLEAR LES VALEURS SINON DUPLICATE ERROR
+    $scope.saveEditUserChanged = function (data2) {
+      $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $scope.activeEdit, data2).success(function (data) {
         if (data.status == "success") {
           $scope.editStatus = true;
-          updateUsers($scope.activeEdit);
+          updateUsers($scope.activeEdit, data2);
         }
       });
     };
@@ -86,6 +79,7 @@ angular.module('pooIhmExemplesApp')
 
     $scope.closeParamsEdit = function () {
       $scope.editStatus = false;
+      $scope.activeEdit = "";
     };
 
     if($routeParams.userId) {
@@ -102,7 +96,19 @@ angular.module('pooIhmExemplesApp')
           $http.get('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $routeParams.userId + '/Roles')
             .success(function(data) {
               if (data.status == "success") {
-                $scope.projectsUser.role = data.data
+                $scope.roles = data.data
+
+                // Maintenant on bind chaque role avec son projet correspondant (on aurait pu utiliser la recherche en
+                // passant l'id du projet en paramètre dans http mais je n'aurais pas "controlé" mes données. Je ne sais
+                // pas si c'est plus performant que ça. (surtout que entre temps les données ont pu être modifiées).
+                for (var i = 0; i < $scope.roles.length; i++) {
+                  for (var j = 0; j < $scope.projectsUser.length; j++) {
+                    if ($scope.roles[i].ProjectId == $scope.projectsUser[j].id) {
+                      $scope.projectsUser[j].role = $scope.roles[i];
+                      break;
+                    }
+                  }
+                }
               }
             });
 
