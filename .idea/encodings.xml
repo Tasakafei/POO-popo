@@ -10,5 +10,6 @@
     <file url="file://$PROJECT_DIR$/app/views/Projects/show.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/views/Users/list.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/views/Users/show.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/views/main.html" charset="UTF-8" />
   </component>
 </project>

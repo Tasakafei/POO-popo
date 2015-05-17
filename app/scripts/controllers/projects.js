@@ -135,12 +135,21 @@ angular.module('pooIhmExemplesApp')
     };
 // TODO PENSER A CLEAR LES VALEURS SINON DUPLICATE ERROR
     $scope.saveEditProjectChanged = function (data2) {
-      $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $scope.activeProjectEdit, data2).success(function (data) {
+      console.log("Appel de saveEditProjectChanged");
+      console.log($scope.activeProjectEdit);
+      console.log(data2);
+      $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Projects/' + $scope.activeProjectEdit, data2).success(function (data) {
         if (data.status == "success") {
           $scope.editStatus = true;
           updateProjects($scope.activeProjectEdit, data2);
         }
       });
+      for (var i = 0; i < $scope.selectionEditMemberRole.length ; ++i) {
+        console.log($scope.selectionEditMemberRole[i]);
+        $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Roles/'+ $scope.selectionEditMemberRole[i].id, $scope.selectionEditMemberRole[i]).success(function (data) {
+          console.log(i + " : success");
+        });
+      }
     };
 
 
