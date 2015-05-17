@@ -1,7 +1,7 @@
 <div class="selectTab" ng-init="activeTab = 0">
   <ul class="nav nav-tabs">
-    <li class="active"><a ng-click="activeTab = 0;" >Search</a></li>
-    <li><a ng-click="activeTab = 1;">Add Project</a></li>
+    <li ng-class="{'active' :activeTab == 0}"><a ng-click="activeTab = 0;" >Search</a></li>
+    <li ng-class="{'active' :activeTab == 1}"><a ng-click="activeTab = 1;">Add Project</a></li>
   </ul>
   <div class="tab-pane animate-show" id="Search"  ng-show="activeTab == 0">
     <form class="form-inline">
