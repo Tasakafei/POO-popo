@@ -1,17 +1,51 @@
-<form class="form-inline">
-  <div class="form-group">
-    <label for="inputId">Id</label>
-    <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model ="searchUser.id">
+<div class="selectTab" ng-init="activeTab = 0">
+  <ul class="nav nav-tabs">
+    <li class="active"><a ng-click="activeTab = 0;" >Search</a></li>
+    <li><a ng-click="activeTab = 1;">Add User</a></li>
+  </ul>
+  <div class="tab-pane animate-show" id="Search"  ng-show="activeTab == 0">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="inputId">Id</label>
+        <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model ="searchUser.id">
+      </div>
+      <div class="form-group" style="margin-left:10px;">
+        <label for="inputName">Name</label>
+        <input type="text" class="form-control" id="inputName" placeholder="Poutine" ng-model="searchUser.name">
+      </div>
+      <div class="form-group" style="margin-left:10px;">
+        <label for="inputSurname">Surname</label>
+        <input type="text" class="form-control" id="inputSurname" placeholder="Vladimir" ng-model="searchUser.surname">
+      </div>
+    </form>
   </div>
-  <div class="form-group" style="margin-left:10px;">
-    <label for="inputName">Name</label>
-    <input type="text" class="form-control" id="inputName" placeholder="Poutine" ng-model="searchUser.name">
+  <div id="Add" class="tab-pane animate-show" ng-show="activeTab == 1">
+    <div class="container-fluid">
+      <form>
+        <div class="form-group">
+          <label for="inputAddName">Name</label>
+          <input type="text" class="form-control" id="inputAddName" ng-model="newUser.name" required>
+        </div>
+        <div class="form-group">
+          <label for="inputAddSurname">Surname</label>
+          <input type="text" class="form-control" id="inputAddSurname" ng-model="newUser.surname" required>
+        </div>
+        <div class="form-group">
+          <label for="inputAddEmail">Email</label>
+          <input type="email" class="form-control" id="inputAddEmail" ng-model="newUser.email">
+        </div>
+        <div class="form-group">
+          <label for="inputAddWebsite">Website</label>
+          <input type="text" class="form-control" id="inputAddWebsite" ng-model="newUser.website">
+        </div>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                ng-click="addUser(newUser); newUser= null;">Save changes
+        </button>
+      </form>
+    </div>
   </div>
-  <div class="form-group" style="margin-left:10px;">
-    <label for="inputSurname">Surname</label>
-    <input type="text" class="form-control" id="inputSurname" placeholder="Vladimir" ng-model="searchUser.surname">
-  </div>
-</form>
+</div>
+
 <h3 class="page-header">Users</h3>
 <div class="table-responsive">
   <table class="table table-striped">
@@ -25,7 +59,7 @@
     </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="user in users | filter:searchUser">
+      <tr ng-repeat="user in users | filter:searchUser" ng-class="{ lastitem: user.id == lastadd};">
         <td>{{$index}}</td>
         <td><button class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="deleteUser('{{user.id}}')" ></button></td>
         <td>

@@ -38,11 +38,8 @@
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#/">Home</a></li>
-              <li><a ng-href="#/users">Users</a></li>
-              <li><a ng-href="#/Projects">Projects</a></li>
-            </ul>
+            <ul ng-controller="NavCtrl" class="nav navbar-nav">
+              <li ng-repeat="item in items" ng-class="{active: isActive(item)}"><a href="#{{item.path}}">{{item.title}}</a></li>      </ul>
           </div>
         </div>
       </div>
@@ -87,12 +84,15 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/projects.js"></script>
+        <script src="scripts/controllers/projects.js"></script>
         <script src="scripts/controllers/users.js"></script>
+        <script src="scripts/controllers/nav.js"></script>
     <script>
       $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').focus()
-      })
+      });
+
+      var activeTab = 0;
 
     </script>
         <!-- endbuild -->

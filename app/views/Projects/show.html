@@ -1,0 +1,34 @@
+<h3 class="page-header">{{currentProject.title}}</h3>
+<div class="panel panel-default">
+  <div class="panel-heading">The project</div>
+  <div class="panel-body">
+    <p>ID : {{currentProject.id}}</p>
+    <p>Description : {{currentProject.description}}</p>
+    <p>Year : {{currentProject.year}}</p>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading" >Composition de l'équipe</div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="user in team">
+            <td>{{$index}}</td>
+            <td><a ng-href="#/user/{{user.id}}">{{user.name}} {{user.surname}}</a></td>
+            <td>{{user.role.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

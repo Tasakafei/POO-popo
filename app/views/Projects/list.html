@@ -1,18 +1,78 @@
-<form class="form-inline">
-  <div class="form-group">
-    <label for="inputId">Id</label>
-    <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model="searchProject.id">
+<div class="selectTab" ng-init="activeTab = 0">
+  <ul class="nav nav-tabs">
+    <li class="active"><a ng-click="activeTab = 0;" >Search</a></li>
+    <li><a ng-click="activeTab = 1;">Add Project</a></li>
+  </ul>
+  <div class="tab-pane animate-show" id="Search"  ng-show="activeTab == 0">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="inputId">Id</label>
+        <input type="text" class="form-control" id="inputId" placeholder="Your ID" ng-model="searchProject.id">
+      </div>
+      <div class="form-group" style="margin-left:10px;">
+        <label for="inputTitle">Title</label>
+        <input type="text" class="form-control" id="inputTitle" placeholder="Fistinière" ng-model="searchProject.title">
+      </div>
+      <div class="form-group" style="margin-left:10px;">
+        <label for="inputDescription">Description</label>
+        <input type="text" class="form-control" id="inputDescription" placeholder="Il était une fois..."
+               ng-model="searchProject.description">
+      </div>
+    </form>
   </div>
-  <div class="form-group" style="margin-left:10px;">
-    <label for="inputTitle">Title</label>
-    <input type="text" class="form-control" id="inputTitle" placeholder="Fistinière" ng-model="searchProject.title">
+  <div id="Add" class="tab-pane animate-show" ng-show="activeTab == 1">
+    <div class="container-fluid">
+      <form>
+        <div class="form-group">
+          <label for="inputAddTitle">Title</label>
+          <input type="text" class="form-control" id="inputAddTitle" ng-model="newProject.title" required>
+        </div>
+        <div class="form-group">
+          <label for="inputAddDescription">Description</label>
+          <textarea class="form-control" id="inputAddDescription" ng-model="newProject.description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="inputAddYear">Year</label>
+          <input type="text" class="form-control" id="inputAddYear" ng-model="newProject.year">
+        </div>
+        <label>Team</label>
+        <button id="addNewMembers" type="button" class="btn btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#modalAddUser"> Add
+        </button>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Delete</th>
+                <th>Name</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="user in selectionAddMember">
+                <td>{{$index}}</td>
+                <td>
+                  <button class="glyphicon glyphicon-remove" aria-hidden="true"
+                          ng-click="deleteUserToAdd('{{user.id}}')"></button>
+                </td>
+                <td>{{user.name}} {{user.surname}}</td>
+                <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control" ng-model="selectionAddMemberRole[$index]">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+      <button type="button" class="btn btn-primary"
+              ng-click="addProject(newProject); newProject = null">Save changes
+      </button>
+    </div>
   </div>
-  <div class="form-group" style="margin-left:10px;">
-    <label for="inputDescription">Description</label>
-    <input type="text" class="form-control" id="inputDescription" placeholder="Il était une fois..."
-           ng-model="searchProject.description">
-  </div>
-</form>
+</div>
+
 <h3 class="page-header">Projects</h3>
 <div class="table-responsive">
   <table class="table table-striped">
@@ -48,7 +108,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeParamsEdit()"><span
           aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="gridSystemModalLabel">Edit user</h4>
+        <h4 class="modal-title" id="gridSystemModalLabel">Edit Project</h4>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
@@ -65,7 +125,36 @@
               <label for="inputEditYear">Year</label>
               <input type="email" class="form-control" id="inputEditYear" ng-model="newFeed.year">
             </div>
-
+            <label>Team</label>
+            <button id="editNewMembers" type="button" class="btn btn-success glyphicon glyphicon-plus" data-toggle="modal" data-target="#modalAddUser"> Add
+            </button>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Delete</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="user in editTeam">
+                  <td>{{$index}}</td>
+                  <td>
+                    <button class="glyphicon glyphicon-remove" aria-hidden="true"
+                            ng-click="deleteUserToEdit('{{user.id}}')"></button>
+                  </td>
+                  <td>{{user.name}} {{user.surname}}</td>
+                  <td>
+                    <div class="form-group">
+                      <input type="text" class="form-control" ng-model="selectionEditMemberRole[$index].name">
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </form>
         </div>
       </div>
@@ -73,6 +162,52 @@
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeParamsEdit()">Close</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
                 ng-click="saveEditProjectChanged(newFeed); newFeed= null;">Save changes
+        </button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="modalAddUser" class="modal fade" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeParamsAddMember();"><span
+          aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Add members</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>To Add</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="user in allUsers">
+                <td>{{$index}}</td>
+                <td>
+                  <label>
+                    <input type="checkbox" name="selectionAddMember[]" value="{{user}}" ng-checked="selectionAddMember.indexOf(user) > -1" ng-click="toggleSelectionAddMember(user);">
+                  </label>
+                </td>
+                <td><a ng-click="closeParamsAddMember();" ng-href="#/user/{{user.id}}">{{user.name}} {{user.surname}}</a></td>
+                <td>{{user.email}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeParamsAddMember();">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes
         </button>
       </div>
     </div>

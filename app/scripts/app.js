@@ -8,7 +8,7 @@
  *
  * Main module of the application.
  */
-angular
+var poo = angular
   .module('pooIhmExemplesApp', [
     'ngAnimate',
     'ngCookies',
@@ -16,8 +16,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch'
-  ])
-  .config(function ($routeProvider) {
+  ]);
+poo.config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -35,7 +35,23 @@ angular
         templateUrl: 'views/Projects/list.html',
         controller: 'ProjectsCtrl'
       })
+      .when('/project/:projectId', {
+        templateUrl: 'views/Projects/show.html',
+        controller: 'ProjectsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
   });
+poo.directive('showtab',
+  function () {
+    return {
+      link: function (scope, element, attrs) {
+        element.click(function(e) {
+          e.preventDefault();
+          $(element).tab('show');
+        });
+      }
+    };
+  });
+

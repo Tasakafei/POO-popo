@@ -13,7 +13,6 @@ angular.module('pooIhmExemplesApp')
       .success(function(data) {
         $scope.users = data.data;
       });
-
     $scope.deleteUser = function (idUser) {
       var index = -1;
       var comArr = eval( $scope.users );
@@ -33,14 +32,16 @@ angular.module('pooIhmExemplesApp')
       }
     };
 
+    $scope.lastadd = -1; // Whatever the default selected index is, use -1 for no selection
+
+    var itemAdded = function ($id) {
+      $scope.lastadd = $id;
+    };
     $scope.addUser = function (data) {
-      var toSend;
-      toSend.name = data.name;
-      toSend.surname = data.surname;
-      toSend.email = data.email;
-      toSend.website = data.website;
-      $http.post('http://poo-ihm-2015-rest.herokuapp.com/api/Users/',toSend).success(function (data) {
+      $http.post('http://poo-ihm-2015-rest.herokuapp.com/api/Users/',data).success(function (data) {
         $scope.status = data.status;
+        $scope.users.splice(0, 0, data.data);
+        itemAdded(data.data.id);
       });
     };
 
@@ -71,7 +72,7 @@ angular.module('pooIhmExemplesApp')
       $http.put('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $scope.activeEdit, data2).success(function (data) {
         if (data.status == "success") {
           $scope.editStatus = true;
-          updateUsers($scope.activeEdit, data2);
+          updateUsers($scope.activeEdit, data.data);
         }
       });
     };
@@ -91,26 +92,27 @@ angular.module('pooIhmExemplesApp')
             .success(function(data) {
             if (data.status == "success") {
               $scope.projectsUser = data.data;
-            }
-          });
-          $http.get('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $routeParams.userId + '/Roles')
-            .success(function(data) {
-              if (data.status == "success") {
-                $scope.roles = data.data
+              $http.get('http://poo-ihm-2015-rest.herokuapp.com/api/Users/' + $routeParams.userId + '/Roles')
+                .success(function(data) {
+                  if (data.status == "success") {
+                    $scope.roles = data.data
 
-                // Maintenant on bind chaque role avec son projet correspondant (on aurait pu utiliser la recherche en
-                // passant l'id du projet en paramètre dans http mais je n'aurais pas "controlé" mes données. Je ne sais
-                // pas si c'est plus performant que ça. (surtout que entre temps les données ont pu être modifiées).
-                for (var i = 0; i < $scope.roles.length; i++) {
-                  for (var j = 0; j < $scope.projectsUser.length; j++) {
-                    if ($scope.roles[i].ProjectId == $scope.projectsUser[j].id) {
-                      $scope.projectsUser[j].role = $scope.roles[i];
-                      break;
+                    // Maintenant on bind chaque role avec son projet correspondant (on aurait pu utiliser la recherche en
+                    // passant l'id du projet en paramètre dans http mais je n'aurais pas "controlé" mes données. Je ne sais
+                    // pas si c'est plus performant que ça. (surtout que entre temps les données ont pu être modifiées).
+                    for (var i = 0; i < $scope.roles.length; i++) {
+                      for (var j = 0; j < $scope.projectsUser.length; j++) {
+                        if ($scope.roles[i].ProjectId == $scope.projectsUser[j].id) {
+                          $scope.projectsUser[j].role = $scope.roles[i];
+                          break;
+                        }
+                      }
                     }
                   }
-                }
-              }
-            });
+                });
+            }
+          });
+
 
         }
       });
